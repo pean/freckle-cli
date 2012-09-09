@@ -1,7 +1,7 @@
 <?
 require_once('inc/config.php');
 require_once('inc/functions.php');
-require_once('inc/freckle.php');
+require_once('inc/freckle_api.php');
 
 //var_dump($argv);
 //exit;
@@ -14,10 +14,6 @@ $date = date('Y-m-d',time());
 $user = FRECKLE_USER;
 
 $p = getProjects();
-
-//print_r($p);
-
-echo "OK\n";
 
 foreach($p as $ps) {
     if(strtolower($ps['name']) == $project) {
@@ -37,13 +33,16 @@ foreach($p as $ps) {
      */
 }
 
-echo $pid."\n";
-echo $hours."\n";
-echo $comment."\n";
-echo $date."\n";
+// echo $pid."\n";
+// echo $hours."\n";
+// echo $comment."\n";
+// echo $date."\n";
 
-$res =  logEntry($user,$pid,$hours,$comment,$date);
-
-echo $res;
-
-echo "\n\n";
+if($pid && $hours && $comment && $date) {
+    $res =  logEntry($user,$pid,$hours,$comment,$date);
+    echo "OK\n";
+    exit;
+} else {
+    echo "Missing parameters\n";
+    exit;
+}
