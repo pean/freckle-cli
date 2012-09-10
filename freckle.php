@@ -10,9 +10,19 @@ $project =  strtolower($argv[1]);
 $mins = strtolower($argv[2]);
 $hours = m2h($mins);
 // TODO: Parse all the following arguments to skip escaping param with ""
-$comment = $argv[3];
+//$comment =  print_r(array_splice($argv,3,count($argv)),', ');
+$comment =  join(array_splice($argv,3,count($argv)),' ');
 $date = date('Y-m-d',time());
 $user = FRECKLE_USER;
+
+/*
+echo $project."\n";
+echo $mins."\n";
+echo $house."\n";
+echo $comment."\n";
+echo $date."\n";
+echo $user."\n";
+ */
 
 $p = getProjects();
 
@@ -22,27 +32,12 @@ foreach($p as $ps) {
         $pid = $ps['id'];
         break;
     }
-    /*
-    foreach($projects as $k => $v) {
-        if($k == 'name' && strtolower($v) == $project) {
-            echo "KEY: $k => $v\n";
-            echo print_r($projects)."\n";
-            echo $projects['id']."\n";
-            break;
-        }
-    }
-     */
 }
 
 if(!$pid) {
     echo "Could not find project\n";
     exit;
 }
-
-// echo $pid."\n";
-// echo $hours."\n";
-// echo $comment."\n";
-// echo $date."\n";
 
 if($pid && $hours && $comment && $date) {
     $res =  logEntry($user,$pid,$hours,$comment,$date);

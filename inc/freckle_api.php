@@ -5,15 +5,15 @@ function getProjects() {
 	$baseurl = FRECKLE_BASEURL;
 	$token = FRECKLE_TOKEN;
     $url = $baseurl."projects.xml?token=".$token;
-    $file = BASE_PATH.'cache/projects.xml';
-
+    $cache = BASE_PATH.'cache/projects.xml';
+    $time = CACHE_AGE;
 
     // TODO: Refresh cache file
 
-    if(file_exists($file)) {
-        $data = file_get_contents($file);
-    } else {
+    $data = check_cache($cache,6);
 
+    if($data === FALSE) {
+        if(VERBOSE) echo "Fetching proejct from Freckle\n";
         $curl_handle = curl_init();
         curl_setopt($curl_handle,CURLOPT_URL,$url);
         curl_setopt($curl_handle,CURLOPT_RETURNTRANSFER,1);
@@ -21,11 +21,10 @@ function getProjects() {
         curl_close($curl_handle);
 
         /// CACHE DATA
-        $res = file_put_contents($file, $data);
+        $res = file_put_contents($cache, $data);
     }
-    
     $array = array();
-    $xml = simplexml_load_string($data);
+    $xml = simplexml_load_string($data) or die("Died. Could not fetch projects.\n");
     foreach($xml->children() as $child) {
         $e = array();
         foreach($child->children() as $v) {
@@ -49,12 +48,6 @@ function getProjects() {
         }
     }
     $array = $sorted;
-
-    
-    //header('Content-type: text/plain');
-    //sort($array);
-    //print_r($array);
-    //exit;
     return $array;
 
 }
@@ -97,11 +90,7 @@ function getEntries($user_id,$from,$to = '',$projects = '',$tags = '') {
         }
         array_push($array,$e);
     }
-	//header('Content-type: text/plain');
-	//print($url);
-	//print($data);
-	//print_r($array);
-	//exit;
+
     return $array;
 
 }
@@ -127,7 +116,6 @@ function getUsers() {
         $e = array();
         foreach($child->children() as $k => $v) {
             $e[$v->getName()] = (string)$v;
-			//$e[$k] = $v[0];
         }
         array_push($array,$e);
     }
@@ -141,8 +129,6 @@ function logEntry($user,$project_id,$minutes,$description,$date) {
     $token = FRECKLE_TOKEN;
 
     $url = $baseurl."entries.xml?token=".$token;
-
-    //echo "$url\n\n";
 
     $xml = 
     '<?xml version="1.0" encoding="UTF-8"?>
@@ -163,6 +149,7 @@ function logEntry($user,$project_id,$minutes,$description,$date) {
     $data = curl_exec($ch);
     curl_close($ch);
     return $data;
+
 }
 
 

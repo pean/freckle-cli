@@ -1,5 +1,4 @@
-<?
-
+<?php
 
 function m2h($mins) {
 	if ($mins < 0) {
@@ -26,6 +25,22 @@ function m2h($mins) {
 	return $hours;
 }
 
-
-
-?>
+function check_cache($cache=false, $time=24) {
+	if($cache === FALSE) 	{
+		return FALSE;
+	} else {
+		$data = FALSE;
+		if(file_exists($cache)) {
+			$filetime = filectime($cache);
+			$age = time()-$filetime;
+			if($age < 3600*$time) {
+				if(VERBOSE) echo "Data is good. Fetching...\n";				
+				$data =  file_get_contents($cache);
+				$filetime = time();
+			} else {
+				if(VERBOSE) echo "Data is old\n";
+			}
+		}		
+		return $data;
+	}
+}
