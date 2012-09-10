@@ -5,7 +5,10 @@ function getProjects() {
 	$baseurl = FRECKLE_BASEURL;
 	$token = FRECKLE_TOKEN;
     $url = $baseurl."projects.xml?token=".$token;
-    $file = 'cache/projects.xml';
+    $file = BASE_PATH.'cache/projects.xml';
+
+
+    // TODO: Refresh cache file
 
     if(file_exists($file)) {
         $data = file_get_contents($file);
