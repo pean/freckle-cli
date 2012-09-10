@@ -9,6 +9,7 @@ require_once('inc/freckle_api.php');
 $project =  strtolower($argv[1]);
 $mins = strtolower($argv[2]);
 $hours = m2h($mins);
+// TODO: Parse all the following arguments to skip escaping param with ""
 $comment = $argv[3];
 $date = date('Y-m-d',time());
 $user = FRECKLE_USER;
@@ -31,6 +32,11 @@ foreach($p as $ps) {
         }
     }
      */
+}
+
+if(!$pid) {
+    echo "Could not find project\n";
+    exit;
 }
 
 // echo $pid."\n";
