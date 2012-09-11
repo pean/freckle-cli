@@ -6,22 +6,39 @@ require_once('inc/freckle_api.php');
 //var_dump($argv);
 //exit;
 
-$project =  strtolower($argv[1]);
-$mins = strtolower($argv[2]);
-$hours = m2h($mins);
-// TODO: Parse all the following arguments to skip escaping param with ""
-//$comment =  print_r(array_splice($argv,3,count($argv)),', ');
-$comment =  join(array_splice($argv,3,count($argv)),' ');
+$oldstyle = 0;
+if($oldstyle) {
+    $project =  strtolower($argv[1]);
+    $mins = strtolower($argv[2]);
+    $hours = m2h($mins);
+    $comment =  join(array_splice($argv,3,count($argv)),' ');
+    $date = date('Y-m-d',time());
+    $user = FRECKLE_USER;
+    print_r($argv);
+}
+
+$args = join(array_splice($argv,1,count($argv)),' ');
+
+$regexp = "/^(.*)\s([\d]{1,2}\:[\d]{2})\s(.*)$/";
+
+preg_match($regexp,$args,$matches);
+// echo "ARGS: ".$args."\n";
+// echo "MATCHES: \n";
+// print_r($matches);
+
+$project =  strtolower($matches[1]);
+$hours = strtolower($matches[2]);
+$comment = $matches[3];
 $date = date('Y-m-d',time());
 $user = FRECKLE_USER;
 
 /*
-echo $project."\n";
-echo $mins."\n";
-echo $house."\n";
-echo $comment."\n";
-echo $date."\n";
-echo $user."\n";
+echo "Date: ".$date."\n";
+echo "User: ".$user."\n";
+echo "Project: ".$project."\n";
+echo "Hours: ".$mins."\n";
+echo "Comment: ".$comment."\n";
+exit;
  */
 
 $p = getProjects();
