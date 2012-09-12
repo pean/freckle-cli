@@ -58,7 +58,7 @@ if(!$pid) {
 
 if($pid && $hours && $comment && $date) {
     $res =  logEntry($user,$pid,$hours,$comment,$date);
-    echo "OK\n";
+    echo "Logged $hours hours for $ps[name]\n$comment";
     exit;
 } else {
     echo "Missing parameters\n";
