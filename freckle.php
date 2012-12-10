@@ -1,10 +1,15 @@
-<?
+<?php
 require_once('inc/config.php');
 require_once('inc/functions.php');
 require_once('inc/freckle_api.php');
 
-//var_dump($argv);
-//exit;
+function flog($str) {
+    file_put_contents(BASE_PATH."freckle.log",$str,FILE_APPEND);
+    file_put_contents(BASE_PATH."msg.log",$str);
+}
+
+flog("Script runs!\n");
+//flog(var_dump($argv));
 
 $oldstyle = 0;
 if($oldstyle) {
@@ -52,15 +57,21 @@ foreach($p as $ps) {
 }
 
 if(!$pid) {
-    echo "Could not find project\n";
+    $output =  "Could not find project $project…\n";
+    flog($output);
+    echo $output;
     exit;
 }
 
 if($pid && $hours && $comment && $date) {
     $res =  logEntry($user,$pid,$hours,$comment,$date);
-    echo "Logged $hours hours for $ps[name]\n$comment";
+    $output =  "Logged $hours hours for $ps[name]\n$comment";
+    flog($output);
+    echo $output;
     exit;
 } else {
-    echo "Missing parameters\n";
+    $output =  "Missing parameters\n";
+    flog($output);
+    echo $output;
     exit;
 }

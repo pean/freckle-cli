@@ -1,4 +1,4 @@
-<?
+<?php
 
 define('FRECKLE_BASEURL','https://COMPANYNAME.letsfreckle.com/api/');
 define('FRECKLE_TOKEN','API_TOKEN');
